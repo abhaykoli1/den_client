@@ -87,9 +87,6 @@ export default function AdminScreen() {
   return (
     <div className="stack">
       <div className="page-head">
-        <div>
-          <p className="muted small">Money received — frames, item bills, memberships, due collections</p>
-        </div>
         <div className="row">
           <TextInput type="month" value={month} onChange={(e) => setMonth(e.target.value || monthKey())} aria-label="Month" />
           <Btn variant="outline" onClick={() => setPdfOpen(true)} disabled={!report}>

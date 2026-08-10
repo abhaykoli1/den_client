@@ -104,7 +104,7 @@ code {
 .muted { color: var(--text-muted); }
 .small { font-size: 10px; }
 .center { text-align: center; }
-.row { display: flex; align-items: center; gap: 6px; }
+.row { display: flex; align-items: flex-start; gap: 6px; }
 .row.wrap { flex-wrap: wrap; }
 .spacer { flex: 1; }
 .stack { display: flex; flex-direction: column; gap: 10px; max-width: 1400px; }
@@ -440,7 +440,7 @@ code {
 .page { padding: 12px; }
 
 /* page title now lives inside the page (not the header) so mobile headers stay lean */
-.page-title { margin: 0 0 8px; font-size: 15.5px; font-weight: 800; letter-spacing: 0.01em; }
+.page-title { margin: 0 0 0px; font-size: 15.5px; font-weight: 800; letter-spacing: 0.01em; }
 
 .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
 
@@ -851,7 +851,7 @@ button.chip.glove.returned:hover { background: var(--accent-green-soft); }
   padding: 20px;
   display: flex; flex-direction: column; gap: 12px;
 }
-.login-brand { display: flex; align-items: center; gap: 10px; }
+.login-brand { display: flex; align-items: center; justify-content: center; gap: 10px; }
 .login-mark {
   border-radius: 10px;
   background: var(--bg-muted);
@@ -862,13 +862,15 @@ button.chip.glove.returned:hover { background: var(--accent-green-soft); }
 .login-sub { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; }
 .login-secure {
   display: flex; align-items: center; gap: 6px;
+  
+  justify-content: center;
   background: var(--bg-muted);
-  border: 1px solid var(--border);
+  /* border: 1px solid var(--border); */
   border-radius: var(--radius-sm);
   padding: 6px 8px;
   font-size: 9px; color: var(--text-muted);
 }
-.login-google { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.login-google { display: flex; flex-direction: column; align-items: center; gap: 4px; width:100%; }
 .login-google .is-busy { opacity: 0.4; pointer-events: none; }
 .login-error {
   background: var(--accent-red-soft);
@@ -1588,7 +1590,7 @@ option[style] { background: var(--bg-elevated); }
    preview, help tab nudged lower. Desktop-first rules stay above. */
 
 /* -- page title: refresh button on every page + tighter title/subtitle gap */
-.page-title-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.page-title-row { display: flex; justify-content: space-between; align-items: center; gap: 8px;  margin-bottom: 8px; }
 .page-title-row .page-title { margin: 0; }
 .title-refresh { flex: none; }
 
@@ -1826,3 +1828,73 @@ option[style] { background: var(--bg-elevated); }
 }
 .nav::-webkit-scrollbar { width: 5px; }
 .nav::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 999px; }
+
+/* ================================================================ v3.10
+   Sidebar tab-list SCROLLS, never SQUISHES (owner's mobile: opening the
+   Admin dropdown compressed the tabs above — flex children shrink by
+   default when the list is taller than `.nav`). flex:none on the direct
+   children makes the list overflow-scroll instead of compressing. */
+
+.nav > .nav-item,
+.nav > .nav-group { flex: none; }
+
+/* ================================================================ v3.11
+   Mobile polish batch (owner's phone screenshots, 2026-08-09):
+   1. Frame bill cards: Table/Items/Total/Paid rows sat in a wrapping flex
+      row with space-between — labels kissed values unevenly ("Table₹60
+      Total₹60" collide). ≤640 → tidy 2-col grid, Total spans full width;
+      the card header's date/print/Change-Winner row wraps instead of
+      clipping offscreen.
+   2. Day Close closing card: badge + "Back to Today" squeezed beside the
+      title ("-₹322 · drawer short" collided). ≤640 → stacked: text full
+      width, badge left / button right in one bottom row.
+   3. Tournament header actions (badge · Edit · Start · Cancel · Delete)
+      overflowed past the screen — Delete clipped. ≤640: Start takes its own
+      full-width row, Cancel + Delete share the next row (half each).
+   4. Champion banner: one crowded line. ≤640 wraps into clean rows:
+      Crown+Champion+prize · runner-up · entries/charges.
+   5. Players table / any wide table: card & scroll wrappers can never
+      stretch the page sideways; tiny scrollbar thumb hints horizontal
+      scroll on phones. */
+
+@media (max-width: 640px) {
+  /* 1 — frame bill rows */
+  .bill-rows.compact { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; }
+  .bill-rows.compact .bill-row.total { grid-column: 1 / -1; }
+  .bill-card-head > .row { flex-wrap: wrap; justify-content: flex-end; row-gap: 4px; }
+
+  /* 2 — day close closing card */
+  .dayclose-line > .row { flex-direction: column; align-items: stretch; }
+  .dayclose-line .dc-side { flex-direction: row; align-items: center; justify-content: space-between; width: 100%; }
+
+  /* 3 — tournament header actions: Start full row, Cancel/Delete next */
+  .t-actions { flex-wrap: wrap; row-gap: 6px; column-gap: 6px; }
+  .t-actions .t-start { order: 8; flex: 1 1 100%; justify-content: center; }
+  .t-actions .t-cancel { order: 9; flex: 1 1 0; justify-content: center; }
+  .t-actions .t-del { order: 10; flex: 1 1 0; justify-content: center; }
+
+  /* 4 — champion banner tidy rows */
+  .champ-banner { flex-wrap: wrap; row-gap: 4px; }
+  .champ-banner .muted.small { flex-basis: 100%; margin-left: 0; }
+}
+
+/* desktop default for the champion entries slot (inline style removed) */
+.champ-entries { margin-left: auto; }
+@media (max-width: 640px) {
+  .champ-entries { margin-left: 0; }
+}
+
+/* 5 — horizontal-scroll containment for wide tables (all widths) */
+.card { min-width: 0; }
+.table-scroll { max-width: 100%; }
+.table-scroll::-webkit-scrollbar { height: 5px; }
+.table-scroll::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 999px; }
+
+/* ================================================================ v3.12
+   Page subtitles moved INTO Layout (owner's hand edit, kept as-is):
+   Layout renders <h1> + .page-subtitle per route from NAV.subtitle and the
+   in-screen .page-head sub-lines were deleted from every screen. Screens
+   keep only their head CONTROLS; this rule pins a lone control group back
+   to the right edge (space-between had kept it right via the subtitle). */
+
+.page-head > :only-child { margin-left: auto; }

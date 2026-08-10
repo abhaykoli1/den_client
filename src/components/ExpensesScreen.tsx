@@ -166,9 +166,6 @@ export default function ExpensesScreen() {
   return (
     <div className="stack">
       <div className="page-head">
-        <div>
-          <p className="muted small">Club spend — rent, electricity, salary, maintenance, stock purchases</p>
-        </div>
         <div className="row">
           <TextInput type="month" value={month} onChange={(e) => setMonth(e.target.value || monthKey())} aria-label="Month" />
           <Btn variant="green" onClick={() => setModal(true)}>

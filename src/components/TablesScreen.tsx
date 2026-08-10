@@ -931,12 +931,6 @@ export default function TablesScreen() {
 
   return (
     <div className="stack">
-      <div className="page-head">
-        <div>
-          <p className="muted small">Live table billing · wallet & due auto-applied</p>
-        </div>
-      </div>
-
       <div className="grid-stats">
         <StatCard label="Total Due" tone="red" value={formatCurrency(stats?.totalDue ?? 0)} sub={`${stats?.activeMembers ?? 0} active members`} />
         <StatCard label="Daily Earnings" tone="green" value={formatCurrency(stats?.todayEarnings ?? 0)} sub="PAYMENT ledger · today" />

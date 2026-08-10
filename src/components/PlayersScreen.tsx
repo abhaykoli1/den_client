@@ -423,9 +423,6 @@ export default function PlayersScreen() {
   return (
     <div className="stack">
       <div className="page-head">
-        <div>
-          <p className="muted small">Members, wallets, passes and dues</p>
-        </div>
         <div className="row">
           <div className="search-box">
             <Search size={13} />

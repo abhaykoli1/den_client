@@ -15,6 +15,7 @@ import {
   Moon,
   PieChart,
   Plus,
+  Receipt,
   ReceiptText,
   RefreshCw,
   Scale,
@@ -48,36 +49,39 @@ type NavEntry = {
   icon: LucideIcon
   to?: string
   title?: string
+  subtitle?: string
   /** Hide the entry from staff accounts (money-admin surfaces). */
   adminOnly?: boolean
-  children?: { to: string; label: string; icon: LucideIcon; title: string }[]
+  children?: { to: string; label: string; icon: LucideIcon; title: string; subtitle: string }[]
 }
 
+// Page subtitles live HERE (owner's design, v3.12) — screens no longer print
+// their own sub-line inside .page-head; Layout renders title + subtitle once.
 const NAV: NavEntry[] = [
-  { to: '/tables', label: 'Tables', icon: Grid3x3, title: 'Tables' },
-  { to: '/players', label: 'All Players', icon: Users, title: 'All Players' },
-  { to: '/due-desk', label: 'Due Desk', icon: Wallet, title: 'Due Desk' },
-  { to: '/items', label: 'Item Billing', icon: ShoppingBag, title: 'Item Billing' },
-  // Item Bills lives inside Item Billing (history icon) — no separate tab.
-  { to: '/tournaments', label: 'Tournaments', icon: Trophy, title: 'Tournaments' },
-  { to: '/frames', label: 'Frames', icon: History, title: 'Frame Bills' },
-  { to: '/logs', label: 'Logs', icon: Activity, title: 'Activity Logs' },
-  { to: '/settings', label: 'Settings', icon: Settings, title: 'Settings' },
+  { to: '/tables', label: 'Tables', icon: Grid3x3, title: 'Tables', subtitle: 'Live table billing · wallet & due auto-applied' },
+  { to: '/players', label: 'All Players', icon: Users, title: 'All Players', subtitle: 'Players, wallets, passes & dues' },
+  { to: '/due-desk', label: 'Due Desk', icon: Wallet, title: 'Due Desk', subtitle: 'Manage player dues and payments' },
+  { to: '/items', label: 'Item Billing', icon: ShoppingBag, title: 'Item Billing', subtitle: 'Counter sales — cafe, snacks & misc items' },
+  { to: '/item-bills', label: 'Item Bills', icon: Receipt, title: 'Item Bills', subtitle: 'Counter item bills · history, receipts & dues' },
+  { to: '/tournaments', label: 'Tournaments', icon: Trophy, title: 'Tournaments', subtitle: 'Players & entry fees → knockout → match tables → champion' },
+  { to: '/frames', label: 'Frames', icon: History, title: 'Frame Bills', subtitle: 'Frame billing & history · winner corrections re-bill automatically' },
+  { to: '/logs', label: 'Logs', icon: Activity, title: 'Activity Logs', subtitle: 'Billing, payments, warnings and admin actions' },
+  { to: '/settings', label: 'Settings', icon: Settings, title: 'Settings', subtitle: 'Configure your club settings' },
   // Support + policy pages sit right under Settings; Admin/Master stay pinned bottom.
-  { to: '/support', label: 'Human Support', icon: Headset, title: 'Human Support' },
-  { to: '/privacy', label: 'Privacy & Policy', icon: ScrollText, title: 'Privacy & Policy' },
-  { to: '/terms', label: 'Terms & Conditions', icon: FileText, title: 'Terms & Conditions' },
+  { to: '/support', label: 'Human Support', icon: Headset, title: 'Human Support', subtitle: 'Contact support for help' },
+  { to: '/privacy', label: 'Privacy & Policy', icon: ScrollText, title: 'Privacy & Policy', subtitle: 'View and manage privacy settings' },
+  { to: '/terms', label: 'Terms & Conditions', icon: FileText, title: 'Terms & Conditions', subtitle: 'View and manage terms and conditions' },
   // Admin + Master Admin stay pinned to the very bottom of the sidebar.
   {
     label: 'Admin',
     icon: PieChart,
     adminOnly: true,
     children: [
-      { to: '/day-close', label: 'Day Close', icon: ClipboardCheck, title: 'Day Close · daily accounts' },
-      { to: '/admin', label: 'Monthly Revenue', icon: BarChart3, title: 'Monthly Revenue Sheet' },
-      { to: '/finance', label: 'Finance', icon: Scale, title: 'Finance · P&L & Balance' },
-      { to: '/expenses', label: 'Expenses', icon: ReceiptText, title: 'Expenses' },
-      { to: '/team', label: 'Club Staff', icon: UserCog, title: 'Club Staff · roles & access' },
+      { to: '/day-close', label: 'Day Close', icon: ClipboardCheck, title: 'Day Close · daily accounts', subtitle: 'Close the day and reconcile accounts' },
+      { to: '/admin', label: 'Monthly Revenue', icon: BarChart3, title: 'Monthly Revenue Sheet', subtitle: 'Money received — frames, item bills, memberships, due collections' },
+      { to: '/finance', label: 'Finance', icon: Scale, title: 'Finance · P&L & Balance', subtitle: 'How much came in, went out, and stayed — the month-end account' },
+      { to: '/expenses', label: 'Expenses', icon: ReceiptText, title: 'Expenses', subtitle: 'Track and manage club expenses' },
+      { to: '/team', label: 'Club Staff', icon: UserCog, title: 'Club Staff · roles & access', subtitle: 'Manage staff roles and permissions' },
     ],
   },
 ]
@@ -124,6 +128,9 @@ export default function Layout() {
     return undefined
   }, [location.pathname])
   const title = location.pathname.startsWith('/master') ? 'Master Admin' : (current?.title ?? 'Tables')
+  const subtitle = location.pathname.startsWith('/master')
+    ? 'Manage platform-wide administration'
+    : current?.subtitle
   const isMasterRoute = location.pathname.startsWith('/master')
 
   // Admin group is a dropdown — auto-opens when you land on one of its pages.
@@ -170,11 +177,7 @@ export default function Layout() {
             <img className="brand-logo" src={club.logo} alt={club.name} />
           ) : (
             <span className="brand-mark" aria-hidden>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <circle cx="8" cy="9" r="4" fill="#2ecc71" />
-                <circle cx="15.5" cy="14" r="4" fill="#f0c14b" />
-                <path d="M19 4l1 6" stroke="#f0f1f3" strokeWidth="1.6" strokeLinecap="round" />
-              </svg>
+              <img src="/public/icons/logo.png" width="34" height="34" alt="Rowdy's Den" />
             </span>
           )}
           <div className="brand-text">
@@ -368,8 +371,9 @@ export default function Layout() {
             </div>
           ) : (
             <>
+              <h1 className="page-title">{title}</h1>
               <div className="page-title-row">
-                <h1 className="page-title">{title}</h1>
+                <p className="page-subtitle">{subtitle}</p>
                 <button className="btn-icon title-refresh" aria-label="Refresh page data" title="Refresh data" onClick={doRefresh}>
                   <RefreshCw size={13} className={(isMasterRoute ? maRefreshing : refreshing) ? 'spin' : ''} />
                 </button>

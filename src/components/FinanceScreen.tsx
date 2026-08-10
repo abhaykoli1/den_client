@@ -94,9 +94,6 @@ export default function FinanceScreen() {
   return (
     <div className="stack">
       <div className="page-head">
-        <div>
-          <p className="muted small">How much came in, went out, and stayed — the month-end account</p>
-        </div>
         <div className="row">
           <TextInput type="month" value={month} onChange={(e) => setMonth(e.target.value || monthKey())} aria-label="Month" />
           <Btn variant="outline" onClick={() => setPdfOpen(true)} disabled={!fin}>

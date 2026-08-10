@@ -460,9 +460,6 @@ export default function MasterAdminScreen() {
   return (
     <div className="stack">
       <div className="page-head">
-        <div>
-          <p className="muted small">SaaS accounts, subscriptions, seller plans &amp; all club IDs</p>
-        </div>
         <div className="row">
           <div className="search-box">
             <Search size={13} />

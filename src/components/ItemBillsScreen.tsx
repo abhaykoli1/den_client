@@ -105,9 +105,6 @@ export default function ItemBillsScreen() {
   return (
     <div className="stack">
       <div className="page-head">
-        <div>
-          <p className="muted small">Counter bill history · late payments count in their payment month</p>
-        </div>
         <div className="search-box">
           <Search size={13} />
           <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Customer, item or mode" aria-label="Search item bills" />

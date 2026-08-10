@@ -38,12 +38,6 @@ export default function TeamScreen() {
 
   return (
     <div className="stack">
-      <div className="page-head">
-        <div>
-          <p className="page-subtitle">Staff &amp; owners handling multiple clubs — Master Admins are not counted here</p>
-        </div>
-      </div>
-
       {error && <div className="banner banner-error">{error}</div>}
 
       <div className="grid-stats three">

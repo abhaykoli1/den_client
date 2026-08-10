@@ -48,7 +48,6 @@ export default function SupportScreen() {
 
   return (
     <div className="stack info-page">
-      <span style={{ marginBottom: '0px' }}></span>
       <Card>
         <div className="section-title">
           <Headset size={13} /> Talk to the Master Admin

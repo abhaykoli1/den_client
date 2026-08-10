@@ -7,8 +7,6 @@ import { Card } from './ui'
 export default function TermsScreen() {
   return (
     <div className="stack info-page">
-            <span style={{ marginBottom: '0px' }}></span>
-
       <Card>
         <div className="section-title">
           <FileText size={13} /> Terms &amp; Conditions

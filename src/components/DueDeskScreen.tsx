@@ -119,9 +119,6 @@ export default function DueDeskScreen() {
   return (
     <div className="stack">
       <div className="page-head">
-        <div>
-          <p className="muted small">Collect old dues — full payment removes the member from this list</p>
-        </div>
         <div className="search-box">
           <Search size={13} />
           <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search name or phone" aria-label="Search due members" />

@@ -65,9 +65,6 @@ export default function DayCloseScreen() {
   return (
     <div className="stack">
       <div className="page-head">
-        <div>
-          <p className="muted small">One click for the whole day’s account — match the cash drawer, catch mistakes</p>
-        </div>
         <div className="row">
           <TextInput type="date" value={date} onChange={(e) => setDate(e.target.value || todayKey())} aria-label="Date" />
           <Btn variant="outline" onClick={() => setPdfOpen(true)} disabled={!rep}>

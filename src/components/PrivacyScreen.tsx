@@ -7,8 +7,6 @@ import { Card } from './ui'
 export default function PrivacyScreen() {
   return (
     <div className="stack info-page">
-            <span style={{ marginBottom: '0px' }}></span>
-
       <Card>
         <div className="section-title">
           <ScrollText size={13} /> Privacy &amp; Policy

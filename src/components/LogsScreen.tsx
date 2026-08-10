@@ -28,9 +28,6 @@ export default function LogsScreen() {
   return (
     <div className="stack">
       <div className="page-head">
-        <div>
-          <p className="muted small">Billing, payments, warnings and admin actions</p>
-        </div>
         <div className="row logs-filter">
           <Seg
             value={tag}

@@ -136,9 +136,6 @@ export default function FramesScreen() {
   return (
     <div className="stack">
       <div className="page-head">
-        <div>
-          <p className="muted small">Table billing history · winner corrections re-bill automatically</p>
-        </div>
         <div className="row">
           <TextInput type="month" value={month} onChange={(e) => setMonth(e.target.value)} aria-label="Filter by month" title="Filter by month" />
           {month && (

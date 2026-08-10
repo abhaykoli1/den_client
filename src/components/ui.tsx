@@ -56,16 +56,19 @@ export function Field({ label, children, hint }: { label: string; children: Reac
   )
 }
 
-export function TextInput(props: InputHTMLAttributes<HTMLInputElement>) {
-  return <input className="input" {...props} />
+// v3.13 — className passed by a caller must ADD to the base design classes,
+// never replace them. Tournaments' match card was silently losing .input /
+// .select (browser-native white boxes) because {...props} overrode className.
+export function TextInput({ className = '', ...rest }: InputHTMLAttributes<HTMLInputElement>) {
+  return <input className={`input ${className}`.trim()} {...rest} />
 }
 
-export function TextArea(props: TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return <textarea className="input textarea" rows={2} {...props} />
+export function TextArea({ className = '', ...rest }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  return <textarea className={`input textarea ${className}`.trim()} rows={2} {...rest} />
 }
 
-export function Select(props: SelectHTMLAttributes<HTMLSelectElement>) {
-  return <select className="input select" {...props} />
+export function Select({ className = '', ...rest }: SelectHTMLAttributes<HTMLSelectElement>) {
+  return <select className={`input select ${className}`.trim()} {...rest} />
 }
 
 export function Badge({ kind = 'muted', children }: { kind?: 'green' | 'gold' | 'red' | 'blue' | 'muted' | 'dark'; children: ReactNode }) {

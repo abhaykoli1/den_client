@@ -11,8 +11,9 @@ interface ThemeCtx {
 const Ctx = createContext<ThemeCtx>({ theme: 'light', toggle: () => undefined })
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  // Light mode is the default; dark stays one tap away in the sidebar.
-  const [theme, setTheme] = useState<Theme>(() => (getThemePref() === 'dark' ? 'dark' : 'light'))
+  // v3.16 — Dark mode is the DEFAULT now (owner's call); light stays one tap away
+  // in the sidebar. Anyone who already picked a theme keeps their saved choice.
+  const [theme, setTheme] = useState<Theme>(() => (getThemePref() === 'light' ? 'light' : 'dark'))
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)

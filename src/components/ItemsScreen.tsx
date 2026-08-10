@@ -195,10 +195,11 @@ export default function ItemsScreen() {
     })
 
   const createBill = async () => {
-    if (!customer.trim()) {
-      toast.error('Customer name is required')
+    if (!customer.trim() && !member) {
+      toast.error('Customer name is required — or pick a member')
       return
     }
+    const billName = customer.trim() || member?.name || ''
     if (selected.length === 0) {
       toast.error('Add at least one item')
       return
@@ -210,7 +211,7 @@ export default function ItemsScreen() {
     setBusy(true)
     const r = await mutate('item-bills', {
       body: {
-        customerName: customer.trim(),
+        customerName: billName,
         memberId: memberId || null,
         items: selected.map((m) => ({ itemId: m.id, qty: qty[m.id] })),
         discount: discountNum,
@@ -218,7 +219,7 @@ export default function ItemsScreen() {
         paidAmount: mode === 'due' || mode === 'wallet' ? 0 : paidNum,
         notes: notes || null,
       },
-      toast: `Item bill created · ${customer.trim()} · ${formatCurrency(total)}`,
+      toast: `Item bill created · ${billName} · ${formatCurrency(total)}`,
     })
     setBusy(false)
     if (r) {
@@ -242,9 +243,6 @@ export default function ItemsScreen() {
   return (
     <div className="stack">
       <div className="page-head">
-        <div>
-          <p className="muted small">Counter sales — cafe, snacks &amp; misc items</p>
-        </div>
         <div className="row">
           <button className="btn-icon" aria-label="All Item Bills" title="All Item Bills" onClick={() => navigate('/item-bills')}>
             <Receipt size={15} />
@@ -304,11 +302,22 @@ export default function ItemsScreen() {
           )}
 
           <div className="form-grid two">
-            <Field label="Customer Name *">
+            <Field label={member ? 'Customer Name (from member)' : 'Customer Name *'}>
               <TextInput value={customer} onChange={(e) => setCustomer(e.target.value)} placeholder="Walk-in customer" />
             </Field>
             <Field label="Member (optional — enables wallet/due)">
-              <Select value={memberId} onChange={(e) => setMemberId(e.target.value)}>
+              <Select
+                value={memberId}
+                onChange={(e) => {
+                  const id = e.target.value
+                  setMemberId(id)
+                  // Picked a member with the name box empty? Their name becomes the bill name (v3.10).
+                  if (id && !customer.trim()) {
+                    const m = members.find((x) => x.id === id)
+                    if (m) setCustomer(m.name)
+                  }
+                }}
+              >
                 <option value="">Guest / no member</option>
                 {members.filter((m) => m.active).map((m) => (
                   <option key={m.id} value={m.id}>{m.name}</option>

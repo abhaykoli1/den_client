@@ -538,7 +538,7 @@ function TournamentDetail({
             </p>
           </div>
         </div>
-        <div className="row">
+        <div className="row t-actions">
           <Badge kind={STATUS_KIND[t.status]}>{t.status}</Badge>
           {canEdit && (
             <Btn size="sm" variant="ghost" onClick={() => setEditing(true)}>
@@ -547,16 +547,16 @@ function TournamentDetail({
           )}
           {t.status === 'upcoming' && (
             <>
-              <Btn size="sm" variant="green" loading={busy === 'start'} disabled={t.playerCount < 2} onClick={start}>
+              <Btn size="sm" variant="green" className="t-start" loading={busy === 'start'} disabled={t.playerCount < 2} onClick={start}>
                 <Play size={12} /> {isLeague ? 'Start · Make Fixtures' : 'Start · Make Bracket'}
               </Btn>
-              <Btn size="sm" variant="ghost" onClick={() => setConfirmCancel(true)}>
+              <Btn size="sm" variant="ghost" className="t-cancel" onClick={() => setConfirmCancel(true)}>
                 <Ban size={12} /> Cancel
               </Btn>
             </>
           )}
           {t.status !== 'running' && (
-            <Btn size="sm" variant="red" onClick={() => setConfirmDel(true)}>
+            <Btn size="sm" variant="red" className="t-del" onClick={() => setConfirmDel(true)}>
               <Trash2 size={12} /> Delete
             </Btn>
           )}
@@ -573,7 +573,7 @@ function TournamentDetail({
               runner-up {t.runnerUpName}{t.prize2 > 0 ? ` · ${formatCurrency(t.prize2)}` : ''}
             </span>
           )}
-          <span className="muted small" style={{ marginLeft: 'auto' }}>
+          <span className="muted small champ-entries">
             entries {formatCurrency(t.collected)}
             {t.tableCharges > 0 ? ` · table charges ${formatCurrency(t.tableCharges)}` : ''}
           </span>
@@ -827,9 +827,6 @@ export default function TournamentsScreen() {
   return (
     <div className="stack">
       <div className="page-head">
-        <div>
-          <p className="muted small">Players &amp; entry fees → knockout bracket → match tables → champion &amp; prizes</p>
-        </div>
         <Btn variant="green" onClick={() => setCreating(true)}>
           <Plus size={13} /> New Tournament
         </Btn>
